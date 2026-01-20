@@ -1,0 +1,13 @@
+R_DEF: Internal format may change without notice
+local
+color colorAccent
+color colorPrimary
+color colorPrimaryDark
+color gradient_dark
+color gradient_end
+color gradient_light
+color gradient_mid
+color gradient_start
+color purple_soft
+color purple_ultra_light
+style Theme.PrintBridge
