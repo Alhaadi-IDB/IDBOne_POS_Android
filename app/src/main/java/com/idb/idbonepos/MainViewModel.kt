@@ -14,7 +14,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.idb.idbonepos.model.PrintSettings
 import com.idb.idbonepos.model.PrintUiState
+import com.idb.idbonepos.model.PrinterProfile
+import com.idb.idbonepos.model.PrinterProfileType
 import com.idb.idbonepos.printing.PrintJobRunner
 import com.idb.idbonepos.printing.PrintStage
 import com.idb.idbonepos.printing.UrlPrintService
@@ -76,7 +79,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (!hasBluetoothPermission()) {
             _uiState.value = PrintUiState(
                 status = PrintStatus.WaitingForPermission,
-                message = "Bluetooth permission required to idbonepos.",
+                message = "Bluetooth permission required to IDBOne POS.",
                 pdfId = pdfId
             )
             return
@@ -84,7 +87,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (settings.printerAddress.isNullOrBlank()) {
             _uiState.value = PrintUiState(
                 status = PrintStatus.Error,
-                message = "No printer configured. Select a paired printer first.",
+                message = "No printer configured.",
                 pdfId = pdfId
             )
             return
@@ -119,7 +122,40 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private suspend fun startPrintFromUrl(address: String, pdfUrl: String, type: String) {
-        val settings = settingsRepository.settingsFlow.first()
+        // Determine the profile type - use ORDER as default if type is empty
+        val profileType = if (type.isNotBlank()) {
+            try {
+                PrinterProfileType.valueOf(type.trim().uppercase())
+            } catch (e: Exception) {
+                PrinterProfileType.ORDER
+            }
+        } else {
+            PrinterProfileType.ORDER
+        }
+
+        // Get all saved printers and default settings
+        val allPrinters = settingsRepository.printersFlow.first()
+        val defaultSettings = settingsRepository.settingsFlow.first()
+
+        // Find printer configuration based on address and profile type
+        val matchingPrinter = allPrinters.firstOrNull { printer ->
+            printer.address.equals(address, ignoreCase = true) &&
+            printer.profileType == profileType
+        }
+
+        // If not found with exact profile type, try ORDER as fallback
+        val printerProfile = matchingPrinter ?: allPrinters.firstOrNull { printer ->
+            printer.address.equals(address, ignoreCase = true) &&
+            printer.profileType == PrinterProfileType.ORDER
+        }
+
+        // Use printer configuration if found, otherwise use default settings
+        val settings = if (printerProfile != null) {
+            settingsFromProfile(printerProfile, defaultSettings)
+        } else {
+            defaultSettings
+        }
+
         val needsBluetooth = !UrlPrintService.isEthernet(type, address)
         if (needsBluetooth && !isBluetoothAvailable()) {
             _uiState.value = PrintUiState(
@@ -136,6 +172,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
 
+        val isUsingDefaultSettings = printerProfile == null
         _uiState.value = PrintUiState(
             status = PrintStatus.Downloading,
             message = "Downloading PDF..."
@@ -151,9 +188,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     pdfUrl = pdfUrl
                 )
             }
+            // Build message with printer info
+            val printerInfo = buildString {
+                append("Print job sent.")
+                append("\nPrinter: $address")
+                if (isUsingDefaultSettings) {
+                    append("\nDefault setting: Yes")
+                } else {
+                    append("\nDefault setting: No")
+                }
+            }
             _uiState.value = PrintUiState(
                 status = PrintStatus.Success,
-                message = "Print job sent."
+                message = printerInfo
             )
         } catch (e: Exception) {
             _uiState.value = PrintUiState(
@@ -161,6 +208,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 message = e.message ?: "Printing failed."
             )
         }
+    }
+
+    private fun settingsFromProfile(profile: PrinterProfile, fallback: PrintSettings): PrintSettings {
+        return fallback.copy(
+            printerName = profile.name,
+            printerAddress = profile.address,
+            printMode = profile.printMode,
+            printWidthMm = profile.printWidthMm,
+            printResolutionDpi = profile.printResolutionDpi,
+            initialCommands = profile.initialCommands,
+            cutterCommands = profile.cutterCommands,
+            drawerCommands = profile.drawerCommands
+        )
     }
 
     private fun updateProgress(pdfId: String, stage: PrintStage) {
