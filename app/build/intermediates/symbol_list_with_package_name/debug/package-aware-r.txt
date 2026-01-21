@@ -1350,6 +1350,7 @@ color dim_foreground_material_dark
 color dim_foreground_material_light
 color error_color_material_dark
 color error_color_material_light
+color error_red
 color foreground_material_dark
 color foreground_material_light
 color gradient_dark
@@ -2028,6 +2029,7 @@ color secondary_text_default_material_dark
 color secondary_text_default_material_light
 color secondary_text_disabled_material_dark
 color secondary_text_disabled_material_light
+color success_green
 color switch_thumb_disabled_material_dark
 color switch_thumb_disabled_material_light
 color switch_thumb_material_dark
@@ -2038,6 +2040,7 @@ color tooltip_background_dark
 color tooltip_background_light
 color vector_tint_color
 color vector_tint_theme_color
+color warning_orange
 dimen abc_action_bar_content_inset_material
 dimen abc_action_bar_content_inset_with_nav
 dimen abc_action_bar_default_height_material
@@ -2946,6 +2949,8 @@ drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
 drawable ic_search_black_24
+drawable idb_robot
+drawable loading_robot
 drawable m3_avd_hide_password
 drawable m3_avd_show_password
 drawable m3_bottom_sheet_drag_handle
@@ -3672,6 +3677,9 @@ layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
+mipmap ic_launcher
+mipmap ic_launcher_foreground
+mipmap ic_launcher_round
 plurals mtrl_badge_content_description
 string abc_action_bar_home_description
 string abc_action_bar_up_description

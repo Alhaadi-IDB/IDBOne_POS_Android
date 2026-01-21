@@ -23,6 +23,7 @@ fun AppScaffold(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
+                        MaterialTheme.colorScheme.primary,
                         MaterialTheme.colorScheme.background,
                         MaterialTheme.colorScheme.surfaceVariant,
                         MaterialTheme.colorScheme.surface

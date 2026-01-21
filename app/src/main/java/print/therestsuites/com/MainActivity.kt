@@ -2,21 +2,40 @@ package print.therestsuites.com
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.ColorRes
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import print.therestsuites.com.R
 import print.therestsuites.com.ui.PrintBridgeApp
 import print.therestsuites.com.ui.theme.PrintBridgeTheme
 
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Set status bar color to match toolbar gradient (primary color from theme)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary)
+        
+        // Enable edge-to-edge display
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        
+        // Make status bar content dark (since gradient background is dark purple)
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController?.isAppearanceLightStatusBars = true
+        
         handleDeepLink(intent)
         setContent {
-            PrintBridgeTheme {
+            PrintBridgeTheme() {
                 PrintBridgeApp(viewModel = viewModel)
             }
         }

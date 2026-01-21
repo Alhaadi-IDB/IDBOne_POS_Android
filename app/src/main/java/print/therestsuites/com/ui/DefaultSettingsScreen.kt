@@ -1,12 +1,16 @@
 package print.therestsuites.com.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -69,95 +73,107 @@ fun DefaultSettingsScreen(onBack: () -> Unit) {
             )
         }
     ) { padding ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(horizontal = 20.dp)
         ) {
-            item {
-                Text(
-                    text = "These settings apply as the default configuration for all printers.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            item {
-                DropdownSetting(
-                    label = "Print mode",
-                    value = editMode.name.lowercase().replaceFirstChar { it.uppercase() },
-                    options = printModes.map { it.name.lowercase().replaceFirstChar { c -> c.uppercase() } },
-                    onOptionSelected = { index -> editMode = printModes[index] }
-                )
-            }
-
-            item {
-                DropdownSetting(
-                    label = "Print width",
-                    value = "${editWidth} mm",
-                    options = printWidths.map { "$it mm" },
-                    onOptionSelected = { index -> editWidth = printWidths[index] }
-                )
-            }
-
-            val currentResolution = printResolutions.firstOrNull { it.dpi == editResolution }
-            item {
-                DropdownSetting(
-                    label = "Print resolution",
-                    value = currentResolution?.label ?: "${editResolution} dpi",
-                    options = printResolutions.map { it.label },
-                    onOptionSelected = { index -> editResolution = printResolutions[index].dpi }
-                )
-            }
-
-            item {
-                CommandField(
-                    label = "Initial ESC/POS commands",
-                    value = editInitialCommands,
-                    onValueChange = { editInitialCommands = it }
-                )
-            }
-
-            item {
-                CommandField(
-                    label = "Cutter ESC/POS commands",
-                    value = editCutterCommands,
-                    onValueChange = { editCutterCommands = it }
-                )
-            }
-
-            item {
-                CommandField(
-                    label = "Drawer ESC/POS commands",
-                    value = editDrawerCommands,
-                    onValueChange = { editDrawerCommands = it }
-                )
-            }
-
-            item {
-                HorizontalDivider()
-            }
-
-            item {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Button(
-                        onClick = {
-                            scope.launch {
-                                repository.updatePrintMode(editMode)
-                                repository.updatePrintWidth(editWidth)
-                                repository.updatePrintResolution(editResolution)
-                                repository.updateInitialCommands(editInitialCommands)
-                                repository.updateCutterCommands(editCutterCommands)
-                                repository.updateDrawerCommands(editDrawerCommands)
-                            }
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Save default configuration")
-                    }
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(vertical = 20.dp)
+            ) {
+                item {
+                    Text(
+                        text = "These settings apply as the default configuration for all printers.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
+
+                item {
+                    DropdownSetting(
+                        label = "Print mode",
+                        value = editMode.name.lowercase().replaceFirstChar { it.uppercase() },
+                        options = printModes.map { it.name.lowercase().replaceFirstChar { c -> c.uppercase() } },
+                        onOptionSelected = { index -> editMode = printModes[index] }
+                    )
+                }
+
+                item {
+                    DropdownSetting(
+                        label = "Print width",
+                        value = "${editWidth} mm",
+                        options = printWidths.map { "$it mm" },
+                        onOptionSelected = { index -> editWidth = printWidths[index] }
+                    )
+                }
+
+                val currentResolution = printResolutions.firstOrNull { it.dpi == editResolution }
+                item {
+                    DropdownSetting(
+                        label = "Print resolution",
+                        value = currentResolution?.label ?: "${editResolution} dpi",
+                        options = printResolutions.map { it.label },
+                        onOptionSelected = { index -> editResolution = printResolutions[index].dpi }
+                    )
+                }
+
+                item {
+                    CommandField(
+                        label = "Initial ESC/POS commands",
+                        value = editInitialCommands,
+                        onValueChange = { editInitialCommands = it }
+                    )
+                }
+
+                item {
+                    CommandField(
+                        label = "Cutter ESC/POS commands",
+                        value = editCutterCommands,
+                        onValueChange = { editCutterCommands = it }
+                    )
+                }
+
+                item {
+                    CommandField(
+                        label = "Drawer ESC/POS commands",
+                        value = editDrawerCommands,
+                        onValueChange = { editDrawerCommands = it }
+                    )
+                }
+
+                item {
+                    HorizontalDivider()
+                }
+            }
+            
+            // Button at the bottom with 10dp margin
+            Button(
+                onClick = {
+                    scope.launch {
+                        repository.updatePrintMode(editMode)
+                        repository.updatePrintWidth(editWidth)
+                        repository.updatePrintResolution(editResolution)
+                        repository.updateInitialCommands(editInitialCommands)
+                        repository.updateCutterCommands(editCutterCommands)
+                        repository.updateDrawerCommands(editDrawerCommands)
+                        // Navigate back after saving
+                        onBack()
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Text("Save default configuration", color = MaterialTheme.colorScheme.onPrimary)
             }
         }
     }

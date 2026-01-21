@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:1:1-36:12
-INJECTED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:1:1-36:12
-INJECTED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:1:1-36:12
-INJECTED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:1:1-36:12
+ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:1:1-38:12
+INJECTED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:1:1-38:12
+INJECTED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:1:1-38:12
+INJECTED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:1:1-38:12
 MERGED from [androidx.navigation:navigation-common:2.7.6] /Users/alhaadiidb/.gradle/caches/transforms-3/ba2ce66ca0878151fa65b1d1d72e0ee5/transformed/navigation-common-2.7.6/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.navigation:navigation-runtime:2.7.6] /Users/alhaadiidb/.gradle/caches/transforms-3/0b70cb7adbad28e0f955dad4d8e5c6d0/transformed/navigation-runtime-2.7.6/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.navigation:navigation-common-ktx:2.7.6] /Users/alhaadiidb/.gradle/caches/transforms-3/6ff88bf81f9a02407f3dca84b756dedd/transformed/navigation-common-ktx-2.7.6/AndroidManifest.xml:2:1-7:12
@@ -109,8 +109,8 @@ ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest
 	android:name
 		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:6:22-73
 application
-ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:8:5-35:19
-INJECTED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:8:5-35:19
+ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:8:5-37:19
+INJECTED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:8:5-37:19
 MERGED from [com.google.android.material:material:1.11.0] /Users/alhaadiidb/.gradle/caches/transforms-3/56af212e940d1f2bde023f0cf7bfa9c5/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.11.0] /Users/alhaadiidb/.gradle/caches/transforms-3/56af212e940d1f2bde023f0cf7bfa9c5/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.compose.ui:ui-tooling-android:1.6.2] /Users/alhaadiidb/.gradle/caches/transforms-3/ecc1ab3a7f9b618a90a179f39dad0564/transformed/ui-tooling-release/AndroidManifest.xml:22:5-26:19
@@ -137,54 +137,58 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/alhaadiidb/.gradle/c
 		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:11:9-35
 	android:label
 		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:10:9-37
+	android:roundIcon
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:14:9-54
+	android:icon
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:13:9-43
 	android:allowBackup
 		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:9:9-35
 	android:theme
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:13:9-49
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:15:9-49
 	android:usesCleartextTraffic
 		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:12:9-44
 activity#print.therestsuites.com.MainActivity
-ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:15:9-34:20
+ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:17:9-36:20
 	android:launchMode
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:18:13-43
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:20:13-43
 	android:exported
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:17:13-36
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:19:13-36
 	android:name
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:16:13-41
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:18:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:20:13-23:29
+ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:22:13-25:29
 action#android.intent.action.MAIN
-ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:21:17-69
+ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:23:17-69
 	android:name
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:21:25-66
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:23:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:22:17-77
+ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:24:17-77
 	android:name
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:22:27-74
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:24:27-74
 intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:app.mycompany.com+data:pathPrefix:/orders+data:scheme:https
-ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:25:13-33:29
+ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:27:13-35:29
 	android:autoVerify
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:25:28-53
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:27:28-53
 action#android.intent.action.VIEW
-ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:26:17-69
+ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:28:17-69
 	android:name
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:26:25-66
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:28:25-66
 category#android.intent.category.DEFAULT
-ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:27:17-76
+ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:29:17-76
 	android:name
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:27:27-73
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:29:27-73
 category#android.intent.category.BROWSABLE
-ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:28:17-78
+ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:30:17-78
 	android:name
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:28:27-75
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:30:27-75
 data
-ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:29:17-32:52
+ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:31:17-34:52
 	android:host
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:31:21-53
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:33:21-53
 	android:scheme
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:30:21-43
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:32:21-43
 	android:pathPrefix
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:32:21-49
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:34:21-49
 uses-sdk
 INJECTED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml

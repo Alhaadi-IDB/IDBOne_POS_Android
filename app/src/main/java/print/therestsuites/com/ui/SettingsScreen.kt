@@ -1,5 +1,9 @@
 package print.therestsuites.com.ui
 
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,11 +12,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -22,6 +29,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
@@ -34,6 +42,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -53,6 +63,7 @@ import print.therestsuites.com.model.PrinterType
 import print.therestsuites.com.model.ResolutionOption
 import print.therestsuites.com.settings.SettingsRepository
 import print.therestsuites.com.ui.components.ModernToolbar
+import print.therestsuites.com.ui.components.RobotLoadingIndicator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -143,24 +154,46 @@ fun SettingsScreen(onBack: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
-                if (errorMessage != null) {
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.errorContainer,
-                            contentColor = MaterialTheme.colorScheme.onErrorContainer
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = errorMessage.orEmpty(),
-                                style = MaterialTheme.typography.bodySmall
+                AnimatedVisibility(
+                    visible = errorMessage != null,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    errorMessage?.let { error ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .shadow(
+                                    elevation = 6.dp,
+                                    shape = RoundedCornerShape(16.dp),
+                                    spotColor = MaterialTheme.colorScheme.error.copy(alpha = 0.3f)
+                                ),
+                            shape = RoundedCornerShape(16.dp),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer,
+                                contentColor = MaterialTheme.colorScheme.onErrorContainer
                             )
-                            Button(onClick = { errorMessage = null }) {
-                                Text("Dismiss")
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Text(
+                                    text = error,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onErrorContainer
+                                )
+                                ElevatedButton(
+                                    onClick = { errorMessage = null },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonDefaults.elevatedButtonColors(
+                                        containerColor = MaterialTheme.colorScheme.error,
+                                        contentColor = MaterialTheme.colorScheme.onError
+                                    )
+                                ) {
+                                    Text("Dismiss", color = MaterialTheme.colorScheme.onError)
+                                }
                             }
                         }
                     }
@@ -169,8 +202,19 @@ fun SettingsScreen(onBack: () -> Unit) {
 
             item {
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(
+                            elevation = 4.dp,
+                            shape = RoundedCornerShape(20.dp),
+                            spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                        )
+                        .clip(RoundedCornerShape(20.dp)),
+                    shape = RoundedCornerShape(20.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    )
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
@@ -374,9 +418,13 @@ fun SettingsScreen(onBack: () -> Unit) {
                                             }
                                         }
                                     },
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.secondary,
+                                        contentColor = MaterialTheme.colorScheme.onSecondary
+                                    )
                                 ) {
-                                    Text("Graphic test")
+                                    Text("Graphic test", color = MaterialTheme.colorScheme.onSecondary)
                                 }
                             }
 
@@ -430,9 +478,13 @@ fun SettingsScreen(onBack: () -> Unit) {
                                         }
                                     },
                                     modifier = Modifier.weight(1f),
-                                    enabled = pdfUrl.isNotBlank() && !showLoading
+                                    enabled = pdfUrl.isNotBlank() && !showLoading,
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.tertiary,
+                                        contentColor = MaterialTheme.colorScheme.onTertiary
+                                    )
                                 ) {
-                                    Text("Preview")
+                                    Text("Preview", color = MaterialTheme.colorScheme.onTertiary)
                                 }
                                 Button(
                                     onClick = {
@@ -479,9 +531,13 @@ fun SettingsScreen(onBack: () -> Unit) {
                                         }
                                     },
                                     modifier = Modifier.weight(1f),
-                                    enabled = pdfUrl.isNotBlank() && !showLoading
+                                    enabled = pdfUrl.isNotBlank() && !showLoading,
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.primary,
+                                        contentColor = MaterialTheme.colorScheme.onPrimary
+                                    )
                                 ) {
-                                    Text("Print from URL")
+                                    Text("Print from URL", color = MaterialTheme.colorScheme.onPrimary)
                                 }
                             }
 
@@ -511,11 +567,17 @@ fun SettingsScreen(onBack: () -> Unit) {
                                         if (updated.type == PrinterType.ETHERNET) {
                                             repository.saveEthernetPrinterIP(updated.address)
                                         }
+                                        // Navigate back after saving
+                                        onBack()
                                     }
                                 },
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    contentColor = MaterialTheme.colorScheme.onPrimary
+                                )
                             ) {
-                                Text("Save configuration")
+                                Text("Save configuration", color = MaterialTheme.colorScheme.onPrimary)
                             }
 
                         }
@@ -528,7 +590,15 @@ fun SettingsScreen(onBack: () -> Unit) {
         if (showPreview && previewBitmap != null) {
             AlertDialog(
                 onDismissRequest = { showPreview = false },
-                title = { Text("PDF Preview") },
+                containerColor = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(24.dp),
+                title = { 
+                    Text(
+                        "PDF Preview",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    ) 
+                },
                 text = {
                     Column(
                         modifier = Modifier
@@ -540,13 +610,21 @@ fun SettingsScreen(onBack: () -> Unit) {
                             bitmap = previewBitmap!!.asImageBitmap(),
                             contentDescription = "PDF Preview",
                             contentScale = ContentScale.Fit,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(12.dp))
                         )
                     }
                 },
                 confirmButton = {
-                    Button(onClick = { showPreview = false }) {
-                        Text("Close")
+                    ElevatedButton(
+                        onClick = { showPreview = false },
+                        colors = ButtonDefaults.elevatedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        )
+                    ) {
+                        Text("Close", color = MaterialTheme.colorScheme.onPrimary)
                     }
                 }
             )
@@ -555,7 +633,15 @@ fun SettingsScreen(onBack: () -> Unit) {
         if (showLoading) {
             AlertDialog(
                 onDismissRequest = {},
-                title = { Text("Processing") },
+                containerColor = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(24.dp),
+                title = { 
+                    Text(
+                        "Processing",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    ) 
+                },
                 text = {
                     Column(
                         modifier = Modifier
@@ -564,8 +650,15 @@ fun SettingsScreen(onBack: () -> Unit) {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        CircularProgressIndicator()
-                        Text(loadingMessage, style = MaterialTheme.typography.bodyMedium)
+                        RobotLoadingIndicator(
+                            isLoading = true,
+                            size = 100.dp
+                        )
+                        Text(
+                            loadingMessage,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 },
                 confirmButton = {}
@@ -575,26 +668,54 @@ fun SettingsScreen(onBack: () -> Unit) {
         if (showDeleteDialog && selectedPrinter != null) {
             AlertDialog(
                 onDismissRequest = { showDeleteDialog = false },
-                title = { Text("Delete printer") },
+                containerColor = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(24.dp),
+                title = { 
+                    Text(
+                        "Delete printer",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    ) 
+                },
                 text = {
-                    Text("Remove ${selectedPrinter.name} from saved printers?")
+                    Text(
+                        "Remove ${selectedPrinter.name} from saved printers?",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 },
                 confirmButton = {
-                    Button(
+                    ElevatedButton(
                         onClick = {
-                            val printerId = selectedPrinter.id
-                            scope.launch {
-                                repository.deletePrinter(printerId)
+                            try {
+                                val printerId = selectedPrinter.id
+                                scope.launch {
+                                    try {
+                                        repository.deletePrinter(printerId)
+                                        showDeleteDialog = false
+                                        onBack()
+                                    } catch (e: Exception) {
+                                        Log.e("SettingsScreen", "Error deleting printer: ${e.message}", e)
+                                        errorMessage = "Failed to delete printer: ${e.message}"
+                                        showDeleteDialog = false
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                Log.e("SettingsScreen", "Error in delete action: ${e.message}", e)
+                                errorMessage = "Failed to delete printer: ${e.message}"
                                 showDeleteDialog = false
-                                onBack()
                             }
-                        }
+                        },
+                        colors = ButtonDefaults.elevatedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError
+                        )
                     ) {
-                        Text("Delete")
+                        Text("Delete", color = MaterialTheme.colorScheme.onError)
                     }
                 },
                 dismissButton = {
-                    Button(onClick = { showDeleteDialog = false }) {
+                    TextButton(onClick = { showDeleteDialog = false }) {
                         Text("Cancel")
                     }
                 }

@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -43,6 +44,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Surface
+import androidx.compose.material3.TextButton
 import kotlinx.coroutines.launch
 import print.therestsuites.com.model.PrintSettings
 import print.therestsuites.com.model.PrinterProfile
@@ -159,8 +161,14 @@ fun PrinterSelectionScreen(
                             text = errorMessage.orEmpty(),
                             style = MaterialTheme.typography.bodySmall
                         )
-                        Button(onClick = { errorMessage = null }) {
-                            Text("Dismiss")
+                        Button(
+                            onClick = { errorMessage = null },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.error,
+                                contentColor = MaterialTheme.colorScheme.onError
+                            )
+                        ) {
+                            Text("Dismiss", color = MaterialTheme.colorScheme.onError)
                         }
                     }
                 }
@@ -173,9 +181,13 @@ fun PrinterSelectionScreen(
                 )
                 Button(
                     onClick = onRequestBluetoothPermission,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
                 ) {
-                    Text("Grant Bluetooth Permission")
+                    Text("Grant Bluetooth Permission", color = MaterialTheme.colorScheme.onPrimary)
                 }
                 return@Column
             }
@@ -327,13 +339,17 @@ fun PrinterSelectionScreen(
                             ipAddress = value
                             showAddPrinterDialog = false
                         }
-                    }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
                 ) {
-                    Text("Save")
+                    Text("Save", color = MaterialTheme.colorScheme.onPrimary)
                 }
             },
             dismissButton = {
-                Button(onClick = { showAddPrinterDialog = false }) {
+                TextButton(onClick = { showAddPrinterDialog = false }) {
                     Text("Cancel")
                 }
             }
@@ -359,8 +375,14 @@ private fun PrinterRow(
             Text(text = name, style = MaterialTheme.typography.bodyLarge)
             Text(text = address, style = MaterialTheme.typography.bodySmall)
         }
-        Button(onClick = onClick) {
-            Text(actionLabel)
+        Button(
+            onClick = onClick,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            )
+        ) {
+            Text(actionLabel, color = MaterialTheme.colorScheme.onPrimary)
         }
     }
 }
@@ -405,8 +427,14 @@ private fun SavedPrinterRow(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            Button(onClick = onEdit) {
-                Text("Manage")
+            Button(
+                onClick = onEdit,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Text("Manage", color = MaterialTheme.colorScheme.onPrimary)
             }
         }
     }

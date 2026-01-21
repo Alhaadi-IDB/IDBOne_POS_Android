@@ -3,6 +3,7 @@ local
 color colorAccent
 color colorPrimary
 color colorPrimaryDark
+color error_red
 color gradient_dark
 color gradient_end
 color gradient_light
@@ -10,4 +11,11 @@ color gradient_mid
 color gradient_start
 color purple_soft
 color purple_ultra_light
+color success_green
+color warning_orange
+drawable idb_robot
+drawable loading_robot
+mipmap ic_launcher
+mipmap ic_launcher_foreground
+mipmap ic_launcher_round
 style Theme.PrintBridge

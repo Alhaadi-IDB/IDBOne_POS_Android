@@ -19,6 +19,12 @@ import android.webkit.WebViewClient
 import android.net.http.SslError
 import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,21 +33,26 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -58,6 +69,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -66,6 +80,7 @@ import print.therestsuites.com.model.PrintReport
 import print.therestsuites.com.model.PrintUiState
 import print.therestsuites.com.settings.SettingsRepository
 import print.therestsuites.com.ui.components.ModernToolbar
+import print.therestsuites.com.ui.components.RobotLoadingIndicator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -135,17 +150,30 @@ fun WebViewScreen(
                 ModernToolbar(
                     title = currentTitle,
                     subtitle = currentUrl,
-                    showBack = canGoBack,
+                    showBack = true,
                     onBack = {
                         val webView = webViewRef
+                        // If WebView has history, go back in WebView history
                         if (webView?.canGoBack() == true) {
-                            webView.goBack()
+                            try {
+                                webView.goBack()
+                            } catch (e: Exception) {
+                                Log.e("WebViewScreen", "Error going back in WebView: ${e.message}", e)
+                                // If goBack fails, navigate to main page
+                                onBack()
+                            }
                         } else {
+                            // If no WebView history, go back to main page
                             onBack()
                         }
                     },
                     actions = {
-                        IconButton(onClick = { webViewRef?.reload() }) {
+                        IconButton(
+                            onClick = { webViewRef?.reload() },
+                            colors = IconButtonDefaults.iconButtonColors(
+                                contentColor = Color.White
+                            )
+                        ) {
                             Icon(imageVector = Icons.Default.Refresh, contentDescription = "Reload")
                         }
                     }
@@ -162,16 +190,39 @@ fun WebViewScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                        .padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = "No URL saved yet.",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                    Button(onClick = onBack) {
-                        Text("Go Back")
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            Text(
+                                text = "No URL saved yet.",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            ElevatedButton(
+                                onClick = onBack,
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = ButtonDefaults.elevatedButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    contentColor = MaterialTheme.colorScheme.onPrimary
+                                )
+                            ) {
+                                Text("Go Back", color = MaterialTheme.colorScheme.onPrimary)
+                            }
+                        }
                     }
                 }
             } else {
@@ -180,7 +231,10 @@ fun WebViewScreen(
                         url = url,
                         onWebViewReady = { webViewRef = it },
                         onLoading = { isLoading = it },
-                        onError = { errorMessage = it },
+                        onError = {
+                            //errorMessage = it
+                            Log.d(Log.DEBUG.toString(), "Error loading URL: $it")
+                                  },
                         onUrlChange = {
                             currentUrl = it
                             canGoBack = webViewRef?.canGoBack() == true
@@ -211,9 +265,18 @@ fun WebViewScreen(
                         Card(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .widthIn(max = 900.dp),
+                                .widthIn(max = 900.dp)
+                                .shadow(
+                                    elevation = 8.dp,
+                                    shape = RoundedCornerShape(24.dp),
+                                    spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+                                )
+                                .clip(RoundedCornerShape(24.dp)),
                             shape = RoundedCornerShape(24.dp),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+                            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surface
+                            )
                         ) {
                             WebViewContent(
                                 url = url,
@@ -245,74 +308,139 @@ fun WebViewScreen(
                 }
             }
 
-            if (isLoading) {
+            AnimatedVisibility(
+                visible = isLoading,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(20.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            RobotLoadingIndicator(
+                                isLoading = true,
+                                size = 120.dp
+                            )
+                            Text(
+                                text = "Loading...",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
                 }
             }
 
-            if (errorMessage != null) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .padding(16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Could not load the page.",
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.onErrorContainer,
-                                modifier = Modifier.weight(1f)
-                            )
-
-                            IconButton(
-                                onClick = { errorMessage = null }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = "Close",
-                                    tint = MaterialTheme.colorScheme.onErrorContainer
-                                )
-                            }
-                        }
-
-
-                        Text(
-                            text = errorMessage.orEmpty(),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onErrorContainer
+            AnimatedVisibility(
+                visible = errorMessage != null,
+                enter = fadeIn(tween(300)) + expandVertically(tween(300)),
+                exit = fadeOut(tween(200)) + shrinkVertically(tween(200))
+            ) {
+                errorMessage?.let { error ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                            .padding(16.dp)
+                            .shadow(
+                                elevation = 8.dp,
+                                shape = RoundedCornerShape(20.dp),
+                                spotColor = MaterialTheme.colorScheme.error.copy(alpha = 0.3f)
+                            ),
+                        shape = RoundedCornerShape(20.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.errorContainer
                         )
-                        Button(onClick = {
-                            errorMessage = null
-                            webViewRef?.reload()
-                        }) {
-                            Text("Retry")
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(20.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "Could not load the page",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.onErrorContainer,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                IconButton(
+                                    onClick = { errorMessage = null },
+                                    colors = IconButtonDefaults.iconButtonColors(
+                                        contentColor = MaterialTheme.colorScheme.onErrorContainer
+                                    )
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Close",
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                            }
+                            Text(
+                                text = error,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.9f)
+                            )
+                                ElevatedButton(
+                                onClick = {
+                                    try {
+                                        errorMessage = null
+                                        webViewRef?.reload()
+                                    } catch (e: Exception) {
+                                        errorMessage = "Failed to reload: ${e.message}"
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = ButtonDefaults.elevatedButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.error,
+                                    contentColor = MaterialTheme.colorScheme.onError
+                                )
+                            ) {
+                                Text("Retry", color = MaterialTheme.colorScheme.onError)
+                            }
                         }
                     }
                 }
             }
 
             FilledIconButton(
-                onClick = { isFullscreen = !isFullscreen },
+                onClick = { 
+                    try {
+                        isFullscreen = !isFullscreen
+                    } catch (e: Exception) {
+                        errorMessage = "Failed to toggle fullscreen: ${e.message}"
+                    }
+                },
                 modifier = Modifier
                     .align(Alignment.BottomStart)
-                    .padding(12.dp)
+                    .padding(16.dp)
+                    .shadow(
+                        elevation = 6.dp,
+                        shape = RoundedCornerShape(12.dp)
+                    ),
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             ) {
                 Icon(
                     imageVector = if (isFullscreen) {
@@ -324,7 +452,8 @@ fun WebViewScreen(
                         "Exit Fullscreen"
                     } else {
                         "Enter Fullscreen"
-                    }
+                    },
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }
@@ -333,17 +462,34 @@ fun WebViewScreen(
     if (uiState.status != PrintStatus.Idle || uiState.message.isNotBlank()) {
         AlertDialog(
             onDismissRequest = onDismissStatus,
-            title = { Text("Print status") },
+            containerColor = MaterialTheme.colorScheme.surface,
+            shape = RoundedCornerShape(24.dp),
+            title = { 
+                Text(
+                    "Print status",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                ) 
+            },
             text = {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(vertical = 8.dp)
                 ) {
                     if (uiState.status == PrintStatus.Downloading ||
                         uiState.status == PrintStatus.Printing ||
                         uiState.status == PrintStatus.WaitingForPermission
                     ) {
-                        CircularProgressIndicator()
+                        RobotLoadingIndicator(
+                            isLoading = true,
+                            size = 80.dp
+                        )
+                    } else if (uiState.status == PrintStatus.Error) {
+                        RobotLoadingIndicator(
+                            isLoading = false,
+                            size = 80.dp
+                        )
                     }
                     val statusLabel = when (uiState.status) {
                         PrintStatus.Idle -> ""
@@ -354,16 +500,34 @@ fun WebViewScreen(
                         PrintStatus.Error -> "Error"
                     }
                     if (statusLabel.isNotBlank()) {
-                        Text(statusLabel, style = MaterialTheme.typography.titleSmall)
+                        Text(
+                            statusLabel, 
+                            style = MaterialTheme.typography.titleMedium,
+                            color = when (uiState.status) {
+                                PrintStatus.Success -> MaterialTheme.colorScheme.primary
+                                PrintStatus.Error -> MaterialTheme.colorScheme.error
+                                else -> MaterialTheme.colorScheme.onSurface
+                            }
+                        )
                     }
                     if (uiState.message.isNotBlank()) {
-                        Text(uiState.message, style = MaterialTheme.typography.bodySmall)
+                        Text(
+                            uiState.message, 
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
             },
             confirmButton = {
-                Button(onClick = onDismissStatus) {
-                    Text("Close")
+                ElevatedButton(
+                    onClick = onDismissStatus,
+                    colors = ButtonDefaults.elevatedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
+                ) {
+                    Text("Close", color = MaterialTheme.colorScheme.onPrimary)
                 }
             }
         )
@@ -474,15 +638,26 @@ private fun WebViewContent(
                 }
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView, url: String?, favicon: android.graphics.Bitmap?) {
-                        onError(null)
-                        onLoading(true)
-                        onUrlChange(url.orEmpty())
+                        try {
+                            onError(null)
+                            onLoading(true)
+                            onUrlChange(url.orEmpty())
+                        } catch (e: Exception) {
+                            Log.e("WebViewScreen", "Error in onPageStarted: ${e.message}", e)
+                            onError("Error starting page load: ${e.message}")
+                        }
                     }
 
                     override fun onPageFinished(view: WebView, url: String?) {
-                        onLoading(false)
-                        onUrlChange(url.orEmpty())
-                        injectJavaScriptErrorHandler(view)
+                        try {
+                            onLoading(false)
+                            onUrlChange(url.orEmpty())
+                            injectJavaScriptErrorHandler(view)
+                        } catch (e: Exception) {
+                            Log.e("WebViewScreen", "Error in onPageFinished: ${e.message}", e)
+                            onError("Error finishing page load: ${e.message}")
+                            onLoading(false)
+                        }
                     }
 
                     override fun onReceivedError(
@@ -490,15 +665,21 @@ private fun WebViewContent(
                         request: WebResourceRequest,
                         error: WebResourceError
                     ) {
-                        if (request.isForMainFrame) {
-                            val description = error.description?.toString() ?: "Failed to load page."
-                            val cleartextDetected = description.contains("CLEARTEXT", ignoreCase = true)
-                            val message = if (cleartextDetected) {
-                                "Cleartext HTTP is blocked. Use https or allow cleartext traffic."
-                            } else {
-                                description
+                        try {
+                            if (request.isForMainFrame) {
+                                val description = error.description?.toString() ?: "Failed to load page."
+                                val cleartextDetected = description.contains("CLEARTEXT", ignoreCase = true)
+                                val message = if (cleartextDetected) {
+                                    "Cleartext HTTP is blocked. Use https or allow cleartext traffic."
+                                } else {
+                                    description
+                                }
+                                onError(message)
+                                onLoading(false)
                             }
-                            onError(message)
+                        } catch (e: Exception) {
+                            Log.e("WebViewScreen", "Error in onReceivedError: ${e.message}", e)
+                            onError("Network error: ${e.message}")
                             onLoading(false)
                         }
                     }
@@ -507,13 +688,18 @@ private fun WebViewContent(
                         view: WebView,
                         request: WebResourceRequest
                     ): Boolean {
-                        val targetUrl = request.url?.toString().orEmpty()
-                        val isHttp = targetUrl.startsWith("http://") || targetUrl.startsWith("https://")
-                        return if (isHttp) {
+                        return try {
+                            val targetUrl = request.url?.toString().orEmpty()
+                            val isHttp = targetUrl.startsWith("http://") || targetUrl.startsWith("https://")
+                            if (isHttp) {
+                                false
+                            } else {
+                                onError("Unsupported URL scheme.")
+                                true
+                            }
+                        } catch (e: Exception) {
+                            Log.e("WebViewScreen", "Error in shouldOverrideUrlLoading: ${e.message}", e)
                             false
-                        } else {
-                            onError("Unsupported URL scheme.")
-                            true
                         }
                     }
 
@@ -522,8 +708,21 @@ private fun WebViewContent(
                         request: WebResourceRequest,
                         errorResponse: WebResourceResponse
                     ) {
-                        if (request.isForMainFrame) {
-                            onError("HTTP ${errorResponse.statusCode}")
+                        try {
+                            if (request.isForMainFrame) {
+                                val statusCode = errorResponse.statusCode
+                                val errorMsg = when (statusCode) {
+                                    404 -> "Page not found (404)"
+                                    500 -> "Server error (500)"
+                                    403 -> "Access forbidden (403)"
+                                    else -> "HTTP error: $statusCode"
+                                }
+                                onError(errorMsg)
+                                onLoading(false)
+                            }
+                        } catch (e: Exception) {
+                            Log.e("WebViewScreen", "Error in onReceivedHttpError: ${e.message}", e)
+                            onError("HTTP error occurred")
                             onLoading(false)
                         }
                     }
@@ -533,25 +732,62 @@ private fun WebViewContent(
                         handler: SslErrorHandler,
                         error: SslError
                     ) {
-                        onError("SSL error: ${error.primaryError}")
-                        onLoading(false)
-                        handler.cancel()
+                        try {
+                            val errorMsg = when (error.primaryError) {
+                                android.net.http.SslError.SSL_UNTRUSTED -> "Certificate is not trusted"
+                                android.net.http.SslError.SSL_EXPIRED -> "Certificate has expired"
+                                android.net.http.SslError.SSL_IDMISMATCH -> "Certificate hostname mismatch"
+                                android.net.http.SslError.SSL_NOTYETVALID -> "Certificate not yet valid"
+                                else -> "SSL error: ${error.primaryError}"
+                            }
+                            onError(errorMsg)
+                            onLoading(false)
+                            handler.cancel()
+                        } catch (e: Exception) {
+                            Log.e("WebViewScreen", "Error in onReceivedSslError: ${e.message}", e)
+                            onError("SSL error occurred")
+                            onLoading(false)
+                            handler.cancel()
+                        }
                     }
 
                     override fun onRenderProcessGone(view: WebView, detail: android.webkit.RenderProcessGoneDetail): Boolean {
-                        onError("Web content crashed. Please reload.")
-                        onLoading(false)
-                        return true
+                        try {
+                            val crashed = detail.didCrash()
+                            val message = if (crashed) {
+                                "Web content crashed. Please reload the page."
+                            } else {
+                                "Web content terminated. Please reload the page."
+                            }
+                            onError(message)
+                            onLoading(false)
+                            return true
+                        } catch (e: Exception) {
+                            Log.e("WebViewScreen", "Error in onRenderProcessGone: ${e.message}", e)
+                            onError("Web content error occurred")
+                            onLoading(false)
+                            return true
+                        }
                     }
                 }
-                loadUrl(url)
-                onUrlChange(url)
-                onWebViewReady(this)
+                try {
+                    loadUrl(url)
+                    onUrlChange(url)
+                    onWebViewReady(this)
+                } catch (e: Exception) {
+                    Log.e("WebViewScreen", "Error loading URL: ${e.message}", e)
+                    onError("Failed to load URL: ${e.message}")
+                }
             }
         },
         update = { view ->
-            if (view.url != url) {
-                view.loadUrl(url)
+            try {
+                if (view.url != url) {
+                    view.loadUrl(url)
+                }
+            } catch (e: Exception) {
+                Log.e("WebViewScreen", "Error updating URL: ${e.message}", e)
+                onError("Failed to update URL: ${e.message}")
             }
         }
     )
@@ -633,15 +869,27 @@ private class PrintBridgeJsInterface(
 
     @JavascriptInterface
     fun sendPrintToAndroid(ipAddress: String?, pdfUrl: String?, type: String?) {
-        val addressValue = ipAddress?.trim().orEmpty()
-        val urlValue = pdfUrl?.trim().orEmpty()
-        val typeValue = type?.trim().orEmpty()
-        Log.println(Log.DEBUG,"sendPrintToAndroid=> ","$addressValue :: $urlValue ::  $typeValue")
-        mainHandler.post {
-            if (addressValue.isBlank() || urlValue.isBlank()) {
-                onError("Printer address and PDF URL are required.")
-            } else {
-                onSendPrintToAndroid(addressValue, urlValue, typeValue)
+        try {
+            val addressValue = ipAddress?.trim().orEmpty()
+            val urlValue = pdfUrl?.trim().orEmpty()
+            val typeValue = type?.trim().orEmpty()
+            Log.println(Log.DEBUG,"sendPrintToAndroid=> ","$addressValue :: $urlValue ::  $typeValue")
+            mainHandler.post {
+                try {
+                    if (addressValue.isBlank() || urlValue.isBlank()) {
+                        onError("Printer address and PDF URL are required.")
+                    } else {
+                        onSendPrintToAndroid(addressValue, urlValue, typeValue)
+                    }
+                } catch (e: Exception) {
+                    Log.e("PrintBridgeJsInterface", "Error in sendPrintToAndroid: ${e.message}", e)
+                    onError("Failed to process print request: ${e.message}")
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("PrintBridgeJsInterface", "Error in sendPrintToAndroid: ${e.message}", e)
+            mainHandler.post {
+                onError("Failed to handle print request: ${e.message}")
             }
         }
     }
@@ -660,21 +908,41 @@ private class PrintBridgeJsInterface(
 
     @JavascriptInterface
     fun reportError(message: String?) {
-        val value = message?.trim().orEmpty()
-        mainHandler.post {
-            if (value.isNotBlank()) {
-                onError("JavaScript error: $value")
+        try {
+            val value = message?.trim().orEmpty()
+            mainHandler.post {
+                try {
+                    if (value.isNotBlank()) {
+                        onError("JavaScript error: $value")
+                    }
+                } catch (e: Exception) {
+                    Log.e("PrintBridgeJsInterface", "Error in reportError: ${e.message}", e)
+                }
             }
+        } catch (e: Exception) {
+            Log.e("PrintBridgeJsInterface", "Error in reportError: ${e.message}", e)
         }
     }
 
     private fun handlePrint(payload: String?) {
-        val value = payload?.trim().orEmpty()
-        mainHandler.post {
-            if (value.isBlank()) {
-                onError("Print request is missing a PDF ID.")
-            } else {
-                onTriggerPrint(value)
+        try {
+            val value = payload?.trim().orEmpty()
+            mainHandler.post {
+                try {
+                    if (value.isBlank()) {
+                        onError("Print request is missing a PDF ID.")
+                    } else {
+                        onTriggerPrint(value)
+                    }
+                } catch (e: Exception) {
+                    Log.e("PrintBridgeJsInterface", "Error in handlePrint: ${e.message}", e)
+                    onError("Failed to process print: ${e.message}")
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("PrintBridgeJsInterface", "Error in handlePrint: ${e.message}", e)
+            mainHandler.post {
+                onError("Failed to handle print request: ${e.message}")
             }
         }
     }
