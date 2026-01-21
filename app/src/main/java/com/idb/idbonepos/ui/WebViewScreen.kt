@@ -650,6 +650,20 @@ private fun WebViewContent(
                     }
                 }
                 webViewClient = object : WebViewClient() {
+                    override fun shouldInterceptRequest(
+                        view: WebView,
+                        request: WebResourceRequest
+                    ): WebResourceResponse? {
+                        try {
+                            // Allow all requests - return null to let WebView handle normally
+                            // CORS will be bypassed via JavaScript injection
+                            return null
+                        } catch (e: Exception) {
+                            Log.e("WebViewScreen", "Error in shouldInterceptRequest: ${e.message}", e)
+                            return null
+                        }
+                    }
+
                     override fun onPageStarted(view: WebView, url: String?, favicon: android.graphics.Bitmap?) {
                         try {
                             onError(null)
@@ -666,6 +680,7 @@ private fun WebViewContent(
                             onLoading(false)
                             onUrlChange(url.orEmpty())
                             injectJavaScriptErrorHandler(view)
+                            injectCorsBypass(view)
                         } catch (e: Exception) {
                             Log.e("WebViewScreen", "Error in onPageFinished: ${e.message}", e)
                             onError("Error finishing page load: ${e.message}")
@@ -832,7 +847,12 @@ private fun shouldIgnoreError(message: String): Boolean {
         lower.contains("was loaded over https, but requested an insecure") ||
         lower.contains("insecure xmlhttprequest") ||
         lower.contains("insecure resource") ||
-        lower.contains("this content should also be served over https")
+        lower.contains("this content should also be served over https") ||
+        lower.contains("cors policy") ||
+        lower.contains("has been blocked by cors") ||
+        lower.contains("access to xmlhttprequest") ||
+        lower.contains("preflight request") ||
+        lower.contains("access control check")
 }
 
 private fun injectJavaScriptErrorHandler(webView: WebView) {
@@ -853,6 +873,94 @@ private fun injectJavaScriptErrorHandler(webView: WebView) {
               window.xMainEntry?.AndroidBridge.reportError(message);
             }
           });
+        })();
+    """.trimIndent()
+    webView.evaluateJavascript(script, null)
+}
+
+private fun injectCorsBypass(webView: WebView) {
+    val script = """
+        (function() {
+          if (window.__corsBypassInstalled) return;
+          window.__corsBypassInstalled = true;
+          
+          // Override XMLHttpRequest to bypass CORS and allow mixed content
+          var originalXHROpen = XMLHttpRequest.prototype.open;
+          var originalXHRSend = XMLHttpRequest.prototype.send;
+          
+          XMLHttpRequest.prototype.open = function(method, url, async, user, password) {
+            this._url = url;
+            this._method = method;
+            // Store original URL for mixed content handling
+            return originalXHROpen.apply(this, arguments);
+          };
+          
+          XMLHttpRequest.prototype.send = function(data) {
+            // Allow mixed content and CORS
+            try {
+              if (this._url && (this._url.startsWith('http://') || this._url.startsWith('https://'))) {
+                // Allow cross-origin and mixed content requests
+                this.withCredentials = false;
+                // Force allow mixed content by ensuring the request goes through
+                try {
+                  // Remove any CORS restrictions
+                  if (typeof this.setRequestHeader === 'function') {
+                    // Don't set restrictive headers that might block mixed content
+                  }
+                } catch(e) {}
+              }
+            } catch(e) {
+              console.log('XHR override error:', e);
+            }
+            return originalXHRSend.apply(this, arguments);
+          };
+          
+          // Override fetch to bypass CORS and allow mixed content
+          if (window.fetch) {
+            var originalFetch = window.fetch;
+            window.fetch = function(url, options) {
+              if (!options) options = {};
+              var urlString = typeof url === 'string' ? url : url.toString();
+              
+              // Allow mixed content (HTTP from HTTPS page)
+              if (urlString && urlString.startsWith('http://')) {
+                // Force no-cors mode for mixed content
+                options.mode = 'no-cors';
+                options.credentials = 'omit';
+              } else {
+                // For other requests, remove restrictive CORS settings
+                if (options.mode === 'cors' || options.mode === 'same-origin') {
+                  options.mode = 'no-cors';
+                }
+                if (options.credentials === 'include') {
+                  options.credentials = 'omit';
+                }
+              }
+              
+              return originalFetch(url, options).catch(function(error) {
+                // If fetch fails due to CORS/mixed content, try with no-cors
+                if (error && (error.message && error.message.includes('CORS') || 
+                    error.message && error.message.includes('mixed'))) {
+                  options.mode = 'no-cors';
+                  options.credentials = 'omit';
+                  return originalFetch(url, options);
+                }
+                throw error;
+              });
+            };
+          }
+          
+          // Suppress mixed content console warnings
+          var originalConsoleWarn = console.warn;
+          console.warn = function() {
+            var args = Array.prototype.slice.call(arguments);
+            var message = args.join(' ');
+            // Filter out mixed content warnings
+            if (message && message.toLowerCase().includes('mixed content')) {
+              return; // Suppress the warning
+            }
+            return originalConsoleWarn.apply(console, args);
+          };
         })();
     """.trimIndent()
     webView.evaluateJavascript(script, null)

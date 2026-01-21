@@ -56,7 +56,12 @@ fun PrintBridgeApp(viewModel: MainViewModel) {
         }
     }
 
-    NavHost(navController = navController, startDestination = "home") {
+    NavHost(navController = navController, startDestination = "splash") {
+        composable("splash") {
+            SplashScreen(
+                onNavigateToHome = { navController.navigate("home") { popUpTo("splash") { inclusive = true } } }
+            )
+        }
         composable("home") {
             HomeScreen(
                 onOpenConfiguration = { navController.navigate("settings") },

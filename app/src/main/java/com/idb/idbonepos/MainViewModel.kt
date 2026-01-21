@@ -172,7 +172,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
 
-        val isUsingDefaultSettings = printerProfile == null
+//        val isUsingDefaultSettings = printerProfile == null
         _uiState.value = PrintUiState(
             status = PrintStatus.Downloading,
             message = "Downloading PDF..."
@@ -191,12 +191,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             // Build message with printer info
             val printerInfo = buildString {
                 append("Print job sent.")
-                append("\nPrinter: $address")
-                if (isUsingDefaultSettings) {
-                    append("\nDefault setting: Yes")
+                append("\nPrinter ip: $address")
+                val settingName = if (settings.printerName != null && settings.printerName.isNotBlank()) {
+                    settings.printerName
                 } else {
-                    append("\nDefault setting: No")
+                    "Default"
                 }
+                append("\nSetting: $settingName")
             }
             _uiState.value = PrintUiState(
                 status = PrintStatus.Success,

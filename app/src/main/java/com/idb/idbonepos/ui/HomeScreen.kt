@@ -1,10 +1,12 @@
 package com.idb.idbonepos.ui
 
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,6 +42,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
@@ -77,7 +80,16 @@ fun HomeScreen(
     val settings by repository.settingsFlow.collectAsState(initial = PrintSettings())
     val printerProfiles by repository.printersFlow.collectAsState(initial = emptyList())
     val selectedPrinterId by repository.selectedPrinterIdFlow.collectAsState(initial = null)
-
+    
+    // Get app version
+    val appVersion = remember {
+        try {
+            val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            packageInfo.versionName ?: "1.0"
+        } catch (e: PackageManager.NameNotFoundException) {
+            "1.0"
+        }
+    }
     var savedUrl by remember { mutableStateOf("") }
     var urlInput by remember { mutableStateOf("") }
     var urlError by remember { mutableStateOf<String?>(null) }
@@ -109,7 +121,7 @@ fun HomeScreen(
     AppScaffold(
         topBar = {
             ModernToolbar(
-                title = "Home",
+                title = "${appVersion}",
                 actions = {
                     IconButton(
                         onClick = { optionsExpanded = true },
@@ -149,365 +161,419 @@ fun HomeScreen(
             )
         }
     ) { padding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(20.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            AnimatedVisibility(
-                visible = printerError != null,
-                enter = fadeIn(),
-                exit = fadeOut()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                printerError?.let { error ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .shadow(
-                                elevation = 6.dp,
-                                shape = RoundedCornerShape(16.dp),
-                                spotColor = MaterialTheme.colorScheme.error.copy(alpha = 0.3f)
-                            ),
-                        shape = RoundedCornerShape(16.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.errorContainer,
-                            contentColor = MaterialTheme.colorScheme.onErrorContainer
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            Text(
-                                text = error,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onErrorContainer
+                AnimatedVisibility(
+                    visible = printerError != null,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    printerError?.let { error ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .shadow(
+                                    elevation = 6.dp,
+                                    shape = RoundedCornerShape(16.dp),
+                                    spotColor = MaterialTheme.colorScheme.error.copy(alpha = 0.3f)
+                                ),
+                            shape = RoundedCornerShape(16.dp),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer,
+                                contentColor = MaterialTheme.colorScheme.onErrorContainer
                             )
-                            ElevatedButton(
-                                onClick = { printerError = null },
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = ButtonDefaults.elevatedButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.error
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Text(
+                                    text = error,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onErrorContainer
                                 )
-                            ) {
-                                Text("Dismiss")
-                            }
-                        }
-                    }
-                }
-            }
-
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Text(text = "Load URL", style = MaterialTheme.typography.titleMedium)
-                    OutlinedTextField(
-                        value = urlInput,
-                        onValueChange = {
-                            urlInput = it
-                            urlError = null
-                        },
-                        label = { Text("Web URL") },
-                        modifier = Modifier.fillMaxWidth(),
-                        isError = urlError != null,
-                        singleLine = true,
-                        placeholder = { Text("https://example.com") },
-                        leadingIcon = {
-                            Icon(imageVector = Icons.Default.Create, contentDescription = null)
-                        },
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            focusedLabelColor = MaterialTheme.colorScheme.primary
-                        )
-                    )
-                    if (urlError != null) {
-                        Text(
-                            text = urlError.orEmpty(),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        ElevatedButton(
-                            onClick = {
-                                try {
-                                    val normalized = normalizeUrl(urlInput)
-                                    if (normalized == null) {
-                                        urlError = "Please enter a valid http or https URL."
-                                        return@ElevatedButton
-                                    }
-                                    scope.launch {
-                                        try {
-                                            repository.saveWebUrl(normalized)
-                                            savedUrl = normalized
-                                            onOpenWebView()
-                                        } catch (e: Exception) {
-                                            Log.e("HomeScreen", "Error saving URL: ${e.message}", e)
-                                            urlError = "Failed to save URL: ${e.message}"
-                                        }
-                                    }
-                                } catch (e: Exception) {
-                                    Log.e("HomeScreen", "Error normalizing URL: ${e.message}", e)
-                                    urlError = "Invalid URL format: ${e.message}"
-                                }
-                            },
-                            enabled = isUrlValid,
-                            modifier = Modifier.weight(1f),
-                            colors = ButtonDefaults.elevatedButtonColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                contentColor = MaterialTheme.colorScheme.onPrimary
-                            )
-                        ) {
-                            Text("Open", color = MaterialTheme.colorScheme.onPrimary)
-                        }
-                        Button(
-                            onClick = { showResetDialog = true },
-                            modifier = Modifier.weight(1f),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.secondary,
-                                contentColor = MaterialTheme.colorScheme.onSecondary
-                            )
-                        ) {
-                            Text("Reset URL", color = MaterialTheme.colorScheme.onSecondary)
-                        }
-                    }
-                    if (savedUrl.isNotBlank()) {
-                        Text(
-                            text = "Current: $savedUrl",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
-
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Text(text = "Print Test", style = MaterialTheme.typography.titleMedium)
-                    if (printerProfiles.isEmpty()) {
-                        Text(
-                            text = "No printer selected. Add a printer to continue.",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Button(
-                            onClick = onOpenPrinter,
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                contentColor = MaterialTheme.colorScheme.onPrimary
-                            )
-                        ) {
-                            Text("Add Printer", color = MaterialTheme.colorScheme.onPrimary)
-                        }
-                    } else {
-                        ExposedDropdownMenuBox(
-                            expanded = printerExpanded && printerProfiles.size > 1,
-                            onExpandedChange = {
-                                if (printerProfiles.size > 1) {
-                                    printerExpanded = !printerExpanded
-                                }
-                            }
-                        ) {
-                            val selection = printerProfiles.getOrNull(selectedPrinterIndex)
-                            OutlinedTextField(
-                                value = selection?.name ?: "Printer",
-                                onValueChange = {},
-                                modifier = Modifier
-                                    .menuAnchor()
-                                    .fillMaxWidth(),
-                                readOnly = true,
-                                singleLine = true,
-                                label = { Text("Selected printer") },
-                                trailingIcon = {
-                                    if (printerProfiles.size > 1) {
-                                        ExposedDropdownMenuDefaults.TrailingIcon(
-                                            expanded = printerExpanded
-                                        )
-                                    } else {
-                                        Icon(
-                                            imageVector = Icons.Default.ArrowDropDown,
-                                            contentDescription = null
-                                        )
-                                    }
-                                },
-                                leadingIcon = {
-                                    Icon(imageVector = Icons.Rounded.Send, contentDescription = null)
-                                },
-                                colors = ExposedDropdownMenuDefaults.textFieldColors()
-                            )
-                            ExposedDropdownMenu(
-                                expanded = printerExpanded && printerProfiles.size > 1,
-                                onDismissRequest = { printerExpanded = false }
-                            ) {
-                                printerProfiles.forEachIndexed { index, printer ->
-                                    DropdownMenuItem(
-                                        text = { Text(printer.name) },
-                                        onClick = {
-                                            printerExpanded = false
-                                            selectedPrinterIndex = index
-                                            scope.launch {
-                                                repository.selectPrinter(printer)
-                                            }
-                                        }
+                                ElevatedButton(
+                                    onClick = { printerError = null },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonDefaults.elevatedButtonColors(
+                                        containerColor = MaterialTheme.colorScheme.error
                                     )
+                                ) {
+                                    Text("Dismiss")
                                 }
                             }
                         }
-                        val selectedPrinter = printerProfiles[selectedPrinterIndex]
-                        Text(
-                            text = selectedPrinter.address,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                    }
+                }
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text(text = "Load URL", style = MaterialTheme.typography.titleMedium)
+                        OutlinedTextField(
+                            value = urlInput,
+                            onValueChange = {
+                                urlInput = it
+                                urlError = null
+                            },
+                            label = { Text("Web URL") },
+                            modifier = Modifier.fillMaxWidth(),
+                            isError = urlError != null,
+                            singleLine = true,
+                            placeholder = { Text("https://example.com") },
+                            leadingIcon = {
+                                Icon(imageVector = Icons.Default.Create, contentDescription = null)
+                            },
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                focusedLabelColor = MaterialTheme.colorScheme.primary
+                            )
                         )
+                        if (urlError != null) {
+                            Text(
+                                text = urlError.orEmpty(),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             ElevatedButton(
                                 onClick = {
-                                    scope.launch {
-                                        try {
-                                            val error = withContext(Dispatchers.IO) {
-                                                runCatching {
-                                                    val printerName = if (selectedPrinter.type == PrinterType.ETHERNET) {
-                                                        "Ethernet Printer"
-                                                    } else {
-                                                        selectedPrinter.name
-                                                    }
-                                                    printTestPage(printerName, selectedPrinter.address)
-                                                }.exceptionOrNull()
-                                            }
-                                            if (error != null) {
-                                                Log.e("HomeScreen", "Print test error: ${error.message}", error)
-                                                printerError = "Failed to send test page: ${error.message ?: "Unknown error"}"
-                                            }
-                                        } catch (e: Exception) {
-                                            Log.e("HomeScreen", "Error in idbonepos test: ${e.message}", e)
-                                            printerError = "Failed to send test page: ${e.message}"
+                                    try {
+                                        val normalized = normalizeUrl(urlInput)
+                                        if (normalized == null) {
+                                            urlError = "Please enter a valid http or https URL."
+                                            return@ElevatedButton
                                         }
+                                        scope.launch {
+                                            try {
+                                                repository.saveWebUrl(normalized)
+                                                savedUrl = normalized
+                                                onOpenWebView()
+                                            } catch (e: Exception) {
+                                                Log.e(
+                                                    "HomeScreen",
+                                                    "Error saving URL: ${e.message}",
+                                                    e
+                                                )
+                                                urlError = "Failed to save URL: ${e.message}"
+                                            }
+                                        }
+                                    } catch (e: Exception) {
+                                        Log.e(
+                                            "HomeScreen",
+                                            "Error normalizing URL: ${e.message}",
+                                            e
+                                        )
+                                        urlError = "Invalid URL format: ${e.message}"
                                     }
                                 },
+                                enabled = isUrlValid,
                                 modifier = Modifier.weight(1f),
                                 colors = ButtonDefaults.elevatedButtonColors(
                                     containerColor = MaterialTheme.colorScheme.primary,
                                     contentColor = MaterialTheme.colorScheme.onPrimary
                                 )
                             ) {
-                                Text("Print test", color = MaterialTheme.colorScheme.onPrimary)
+                                Text("Open", color = MaterialTheme.colorScheme.onPrimary)
                             }
-                            ElevatedButton(
-                                onClick = {
-                                    scope.launch {
-                                        try {
-                                            val error = withContext(Dispatchers.IO) {
-                                                runCatching {
-                                                    val printerName = if (selectedPrinter.type == PrinterType.ETHERNET) {
-                                                        "Ethernet Printer"
-                                                    } else {
-                                                        selectedPrinter.name
-                                                    }
-                                                    printGraphicTestPage(
-                                                        context,
-                                                        settings,
-                                                        printerName,
-                                                        selectedPrinter.address
-                                                    )
-                                                }.exceptionOrNull()
-                                            }
-                                            if (error != null) {
-                                                Log.e("HomeScreen", "Graphic test error: ${error.message}", error)
-                                                printerError = "Failed to send graphic test page: ${error.message ?: "Unknown error"}"
-                                            }
-                                        } catch (e: Exception) {
-                                            Log.e("HomeScreen", "Error in graphic test: ${e.message}", e)
-                                            printerError = "Failed to send graphic test page: ${e.message}"
-                                        }
-                                    }
-                                },
+                            Button(
+                                onClick = { showResetDialog = true },
                                 modifier = Modifier.weight(1f),
-                                colors = ButtonDefaults.elevatedButtonColors(
+                                colors = ButtonDefaults.buttonColors(
                                     containerColor = MaterialTheme.colorScheme.secondary,
                                     contentColor = MaterialTheme.colorScheme.onSecondary
                                 )
                             ) {
-                                Text("Print Graphic Test", color = MaterialTheme.colorScheme.onSecondary)
+                                Text("Reset URL", color = MaterialTheme.colorScheme.onSecondary)
+                            }
+                        }
+                        if (savedUrl.isNotBlank()) {
+                            Text(
+                                text = "Current: $savedUrl",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text(text = "Print Test", style = MaterialTheme.typography.titleMedium)
+                        if (printerProfiles.isEmpty()) {
+                            Text(
+                                text = "No printer selected. Add a printer to continue.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Button(
+                                onClick = onOpenPrinter,
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    contentColor = MaterialTheme.colorScheme.onPrimary
+                                )
+                            ) {
+                                Text("Add Printer", color = MaterialTheme.colorScheme.onPrimary)
+                            }
+                        } else {
+                            ExposedDropdownMenuBox(
+                                expanded = printerExpanded && printerProfiles.size > 1,
+                                onExpandedChange = {
+                                    if (printerProfiles.size > 1) {
+                                        printerExpanded = !printerExpanded
+                                    }
+                                }
+                            ) {
+                                val selection = printerProfiles.getOrNull(selectedPrinterIndex)
+                                OutlinedTextField(
+                                    value = selection?.name ?: "Printer",
+                                    onValueChange = {},
+                                    modifier = Modifier
+                                        .menuAnchor()
+                                        .fillMaxWidth(),
+                                    readOnly = true,
+                                    singleLine = true,
+                                    label = { Text("Selected printer") },
+                                    trailingIcon = {
+                                        if (printerProfiles.size > 1) {
+                                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                                expanded = printerExpanded
+                                            )
+                                        } else {
+                                            Icon(
+                                                imageVector = Icons.Default.ArrowDropDown,
+                                                contentDescription = null
+                                            )
+                                        }
+                                    },
+                                    leadingIcon = {
+                                        Icon(
+                                            imageVector = Icons.Rounded.Send,
+                                            contentDescription = null
+                                        )
+                                    },
+                                    colors = ExposedDropdownMenuDefaults.textFieldColors()
+                                )
+                                ExposedDropdownMenu(
+                                    expanded = printerExpanded && printerProfiles.size > 1,
+                                    onDismissRequest = { printerExpanded = false }
+                                ) {
+                                    printerProfiles.forEachIndexed { index, printer ->
+                                        DropdownMenuItem(
+                                            text = { Text(printer.name) },
+                                            onClick = {
+                                                printerExpanded = false
+                                                selectedPrinterIndex = index
+                                                scope.launch {
+                                                    repository.selectPrinter(printer)
+                                                }
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+                            val selectedPrinter = printerProfiles[selectedPrinterIndex]
+                            Text(
+                                text = selectedPrinter.address,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                ElevatedButton(
+                                    onClick = {
+                                        scope.launch {
+                                            try {
+                                                val error = withContext(Dispatchers.IO) {
+                                                    runCatching {
+                                                        val printerName =
+                                                            if (selectedPrinter.type == PrinterType.ETHERNET) {
+                                                                "Ethernet Printer"
+                                                            } else {
+                                                                selectedPrinter.name
+                                                            }
+                                                        printTestPage(
+                                                            printerName,
+                                                            selectedPrinter.address
+                                                        )
+                                                    }.exceptionOrNull()
+                                                }
+                                                if (error != null) {
+                                                    Log.e(
+                                                        "HomeScreen",
+                                                        "Print test error: ${error.message}",
+                                                        error
+                                                    )
+                                                    printerError =
+                                                        "Failed to send test page: ${error.message ?: "Unknown error"}"
+                                                }
+                                            } catch (e: Exception) {
+                                                Log.e(
+                                                    "HomeScreen",
+                                                    "Error in idbonepos test: ${e.message}",
+                                                    e
+                                                )
+                                                printerError =
+                                                    "Failed to send test page: ${e.message}"
+                                            }
+                                        }
+                                    },
+                                    modifier = Modifier.weight(1f),
+                                    colors = ButtonDefaults.elevatedButtonColors(
+                                        containerColor = MaterialTheme.colorScheme.primary,
+                                        contentColor = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                ) {
+                                    Text("Print test", color = MaterialTheme.colorScheme.onPrimary)
+                                }
+                                ElevatedButton(
+                                    onClick = {
+                                        scope.launch {
+                                            try {
+                                                val error = withContext(Dispatchers.IO) {
+                                                    runCatching {
+                                                        val printerName =
+                                                            if (selectedPrinter.type == PrinterType.ETHERNET) {
+                                                                "Ethernet Printer"
+                                                            } else {
+                                                                selectedPrinter.name
+                                                            }
+                                                        printGraphicTestPage(
+                                                            context,
+                                                            settings,
+                                                            printerName,
+                                                            selectedPrinter.address
+                                                        )
+                                                    }.exceptionOrNull()
+                                                }
+                                                if (error != null) {
+                                                    Log.e(
+                                                        "HomeScreen",
+                                                        "Graphic test error: ${error.message}",
+                                                        error
+                                                    )
+                                                    printerError =
+                                                        "Failed to send graphic test page: ${error.message ?: "Unknown error"}"
+                                                }
+                                            } catch (e: Exception) {
+                                                Log.e(
+                                                    "HomeScreen",
+                                                    "Error in graphic test: ${e.message}",
+                                                    e
+                                                )
+                                                printerError =
+                                                    "Failed to send graphic test page: ${e.message}"
+                                            }
+                                        }
+                                    },
+                                    modifier = Modifier.weight(1f),
+                                    colors = ButtonDefaults.elevatedButtonColors(
+                                        containerColor = MaterialTheme.colorScheme.secondary,
+                                        contentColor = MaterialTheme.colorScheme.onSecondary
+                                    )
+                                ) {
+                                    Text(
+                                        "Print Graphic Test",
+                                        color = MaterialTheme.colorScheme.onSecondary
+                                    )
+                                }
                             }
                         }
                     }
                 }
             }
+            
+            // App version at bottom right
+            Text(
+                text = "V $appVersion",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(10.dp)
+            )
         }
     }
 
-    if (showResetDialog) {
-        AlertDialog(
-            onDismissRequest = { showResetDialog = false },
-            containerColor = MaterialTheme.colorScheme.surface,
-            shape = RoundedCornerShape(24.dp),
-            title = { 
-                Text(
-                    "Reset URL",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface
-                ) 
-            },
-            text = { 
-                Text(
-                    "Clear the saved URL so you can enter a new one.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                ) 
-            },
-            confirmButton = {
-                ElevatedButton(
-                    onClick = {
-                        scope.launch {
-                            try {
-                                repository.saveWebUrl("")
-                                savedUrl = ""
-                                urlInput = ""
-                                showResetDialog = false
-                            } catch (e: Exception) {
-                                Log.e("HomeScreen", "Error resetting URL: ${e.message}", e)
-                                urlError = "Failed to reset URL: ${e.message}"
-                                showResetDialog = false
-                            }
-                        }
-                    },
-                    colors = ButtonDefaults.elevatedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.error
+        if (showResetDialog) {
+            AlertDialog(
+                onDismissRequest = { showResetDialog = false },
+                containerColor = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(24.dp),
+                title = {
+                    Text(
+                        "Reset URL",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
-                ) {
-                    Text("Reset")
+                },
+                text = {
+                    Text(
+                        "Clear the saved URL so you can enter a new one.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                },
+                confirmButton = {
+                    ElevatedButton(
+                        onClick = {
+                            scope.launch {
+                                try {
+                                    repository.saveWebUrl("")
+                                    savedUrl = ""
+                                    urlInput = ""
+                                    showResetDialog = false
+                                } catch (e: Exception) {
+                                    Log.e("HomeScreen", "Error resetting URL: ${e.message}", e)
+                                    urlError = "Failed to reset URL: ${e.message}"
+                                    showResetDialog = false
+                                }
+                            }
+                        },
+                        colors = ButtonDefaults.elevatedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.error
+                        )
+                    ) {
+                        Text("Reset")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showResetDialog = false }) {
+                        Text("Cancel")
+                    }
                 }
-            },
-            dismissButton = {
-                TextButton(onClick = { showResetDialog = false }) {
-                    Text("Cancel")
-                }
-            }
-        )
-    }
+            )
+        }
 
 }
 private fun normalizeUrl(raw: String): String? {
