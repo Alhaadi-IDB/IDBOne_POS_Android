@@ -508,11 +508,22 @@ fun WebViewScreen(
                         )
                     }
                     if (uiState.message.isNotBlank()) {
-                        Text(
-                            uiState.message, 
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.Start,
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            val messageLines = uiState.message.split("\n")
+                            messageLines.forEach { line ->
+                                if (line.isNotBlank()) {
+                                    Text(
+                                        text = line,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             },

@@ -16,7 +16,8 @@ object UrlPrintService {
         require(address.isNotBlank()) { "Printer address is required." }
         require(pdfUrl.isNotBlank()) { "PDF URL is required." }
 
-        val effectiveSettings = adjustSettingsForType(settings, type)
+      //val effectiveSettings = adjustSettingsForType(settings, type)---> to override setting
+        val effectiveSettings = settings
         val pdfBytes = downloadPdf(pdfUrl)
         val pdfInputStream = ByteArrayInputStream(pdfBytes)
         val bitmap = PdfRendererHelper.renderFirstPage(pdfInputStream, effectiveSettings.widthDots)
