@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "print.therestsuites.com",
+  "applicationId": "com.idb.idbonepos",
   "variantName": "debug",
   "elements": [
     {

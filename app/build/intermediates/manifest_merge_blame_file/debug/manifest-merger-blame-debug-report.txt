@@ -1,6 +1,6 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-3    package="print.therestsuites.com"
+3    package="com.idb.idbonepos"
 4    android:versionCode="1"
 5    android:versionName="1.0" >
 6
@@ -29,12 +29,12 @@
 19
 20    <permission
 20-->[androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
-21        android:name="print.therestsuites.com.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+21        android:name="com.idb.idbonepos.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
 21-->[androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
 22        android:protectionLevel="signature" />
 22-->[androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
 23
-24    <uses-permission android:name="print.therestsuites.com.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+24    <uses-permission android:name="com.idb.idbonepos.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 24-->[androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
 24-->[androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
 25
@@ -48,8 +48,8 @@
 30        android:extractNativeLibs="false"
 31        android:icon="@mipmap/ic_launcher"
 31-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:13:9-43
-32        android:label="Print Bridge"
-32-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:10:9-37
+32        android:label="IDB POS"
+32-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:10:9-32
 33        android:roundIcon="@mipmap/ic_launcher_round"
 33-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:14:9-54
 34        android:supportsRtl="true"
@@ -61,7 +61,7 @@
 37-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:12:9-44
 38        <activity
 38-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:17:9-36:20
-39            android:name="print.therestsuites.com.MainActivity"
+39            android:name="com.idb.idbonepos.MainActivity"
 39-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:18:13-41
 40            android:exported="true"
 40-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:19:13-36
@@ -93,7 +93,7 @@
 52
 53                <data
 53-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:31:17-34:52
-54                    android:host="app.mycompany.com"
+54                    android:host="com.idb.idbonepos"
 54-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:33:21-53
 55                    android:pathPrefix="/orders"
 55-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:34:21-49
@@ -112,7 +112,7 @@
 63-->[androidx.emoji2:emoji2:1.3.0] /Users/alhaadiidb/.gradle/caches/transforms-3/717f9dc071b78a0adec328cdd5ebdb1e/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
 64            android:name="androidx.startup.InitializationProvider"
 64-->[androidx.emoji2:emoji2:1.3.0] /Users/alhaadiidb/.gradle/caches/transforms-3/717f9dc071b78a0adec328cdd5ebdb1e/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
-65            android:authorities="print.therestsuites.com.androidx-startup"
+65            android:authorities="com.idb.idbonepos.androidx-startup"
 65-->[androidx.emoji2:emoji2:1.3.0] /Users/alhaadiidb/.gradle/caches/transforms-3/717f9dc071b78a0adec328cdd5ebdb1e/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
 66            android:exported="false" >
 66-->[androidx.emoji2:emoji2:1.3.0] /Users/alhaadiidb/.gradle/caches/transforms-3/717f9dc071b78a0adec328cdd5ebdb1e/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37

@@ -136,7 +136,7 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/alhaadiidb/.gradle/c
 	android:supportsRtl
 		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:11:9-35
 	android:label
-		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:10:9-37
+		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:10:9-32
 	android:roundIcon
 		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:14:9-54
 	android:icon
@@ -147,7 +147,7 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/alhaadiidb/.gradle/c
 		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:15:9-49
 	android:usesCleartextTraffic
 		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:12:9-44
-activity#print.therestsuites.com.MainActivity
+activity#com.idb.idbonepos.MainActivity
 ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:17:9-36:20
 	android:launchMode
 		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:20:13-43
@@ -165,7 +165,7 @@ category#android.intent.category.LAUNCHER
 ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:24:17-77
 	android:name
 		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:24:27-74
-intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:app.mycompany.com+data:pathPrefix:/orders+data:scheme:https
+intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:com.idb.idbonepos+data:pathPrefix:/orders+data:scheme:https
 ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:27:13-35:29
 	android:autoVerify
 		ADDED from /Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:27:28-53
@@ -389,7 +389,7 @@ ADDED from [androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transfor
 		ADDED from [androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
 	android:name
 		ADDED from [androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
-permission#print.therestsuites.com.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+permission#com.idb.idbonepos.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
 	android:protectionLevel
 		ADDED from [androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
@@ -399,7 +399,7 @@ uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
 	android:name
 		ADDED from [androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
-uses-permission#print.therestsuites.com.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+uses-permission#com.idb.idbonepos.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
 	android:name
 		ADDED from [androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:26:22-94

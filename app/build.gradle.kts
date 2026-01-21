@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "print.therestsuites.com"
+    namespace = "com.idb.idbonepos"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "print.therestsuites.com"
+        applicationId = "com.idb.idbonepos"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

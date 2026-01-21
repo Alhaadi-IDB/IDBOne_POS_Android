@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "print.therestsuites.com.app-mergeDebugResources-63:/values-zh-rCN/values-zh-rCN.xml",
+            "outputFile": "com.idb.idbonepos.app-mergeDebugResources-63:/values-zh-rCN/values-zh-rCN.xml",
             "map": [
                 {
                     "source": "/Users/alhaadiidb/.gradle/caches/transforms-3/5bd19b78dcd91719078506788dd42a50/transformed/foundation-release/res/values-zh-rCN/values-zh-rCN.xml",

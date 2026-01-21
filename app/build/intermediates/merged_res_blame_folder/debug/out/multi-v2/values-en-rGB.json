@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "print.therestsuites.com.app-mergeDebugResources-63:/values-en-rGB/values-en-rGB.xml",
+            "outputFile": "com.idb.idbonepos.app-mergeDebugResources-63:/values-en-rGB/values-en-rGB.xml",
             "map": [
                 {
                     "source": "/Users/alhaadiidb/.gradle/caches/transforms-3/a19e8573cf049943d51dd30da21f32bf/transformed/ui-release/res/values-en-rGB/values-en-rGB.xml",

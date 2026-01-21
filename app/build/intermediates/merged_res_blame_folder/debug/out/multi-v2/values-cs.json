@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "print.therestsuites.com.app-mergeDebugResources-63:/values-cs/values-cs.xml",
+            "outputFile": "com.idb.idbonepos.app-mergeDebugResources-63:/values-cs/values-cs.xml",
             "map": [
                 {
                     "source": "/Users/alhaadiidb/.gradle/caches/transforms-3/a19e8573cf049943d51dd30da21f32bf/transformed/ui-release/res/values-cs/values-cs.xml",

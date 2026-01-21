@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="print.therestsuites.com"
+    package="com.idb.idbonepos"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -18,10 +18,10 @@
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
     <permission
-        android:name="print.therestsuites.com.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:name="com.idb.idbonepos.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="print.therestsuites.com.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+    <uses-permission android:name="com.idb.idbonepos.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 
     <application
         android:allowBackup="true"
@@ -29,14 +29,14 @@
         android:debuggable="true"
         android:extractNativeLibs="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="Print Bridge"
+        android:label="IDB POS"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/Theme.PrintBridge"
         android:usesCleartextTraffic="true" >
         <activity
-            android:name="print.therestsuites.com.MainActivity"
+            android:name="com.idb.idbonepos.MainActivity"
             android:exported="true"
             android:launchMode="singleTop" >
             <intent-filter>
@@ -51,7 +51,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="app.mycompany.com"
+                    android:host="com.idb.idbonepos"
                     android:pathPrefix="/orders"
                     android:scheme="https" />
             </intent-filter>
@@ -62,7 +62,7 @@
 
         <provider
             android:name="androidx.startup.InitializationProvider"
-            android:authorities="print.therestsuites.com.androidx-startup"
+            android:authorities="com.idb.idbonepos.androidx-startup"
             android:exported="false" >
             <meta-data
                 android:name="androidx.emoji2.text.EmojiCompatInitializer"
