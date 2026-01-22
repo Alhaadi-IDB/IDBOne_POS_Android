@@ -1,6 +1,7 @@
-#Thu Jan 22 10:35:03 MYT 2026
+#Thu Jan 22 12:14:09 MYT 2026
 base.0=/Users/alhaadiidb/Downloads/idbone_pos/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
 base.1=/Users/alhaadiidb/Downloads/idbone_pos/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
+base.10=/Users/alhaadiidb/Downloads/idbone_pos/app/build/intermediates/dex/debug/mergeExtDexDebug/classes3.dex
 base.2=/Users/alhaadiidb/Downloads/idbone_pos/app/build/intermediates/dex/debug/mergeProjectDexDebug/1/classes.dex
 base.3=/Users/alhaadiidb/Downloads/idbone_pos/app/build/intermediates/dex/debug/mergeProjectDexDebug/12/classes.dex
 base.4=/Users/alhaadiidb/Downloads/idbone_pos/app/build/intermediates/dex/debug/mergeProjectDexDebug/15/classes.dex
@@ -11,6 +12,7 @@ base.8=/Users/alhaadiidb/Downloads/idbone_pos/app/build/intermediates/dex/debug/
 base.9=/Users/alhaadiidb/Downloads/idbone_pos/app/build/intermediates/dex/debug/mergeExtDexDebug/classes2.dex
 path.0=classes.dex
 path.1=0/classes.dex
+path.10=classes3.dex
 path.2=1/classes.dex
 path.3=12/classes.dex
 path.4=15/classes.dex
@@ -21,6 +23,7 @@ path.8=9/classes.dex
 path.9=classes2.dex
 renamed.0=classes.dex
 renamed.1=classes2.dex
+renamed.10=classes11.dex
 renamed.2=classes3.dex
 renamed.3=classes4.dex
 renamed.4=classes5.dex

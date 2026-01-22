@@ -2,8 +2,6 @@ package com.idb.idbonepos.printing
 
 import android.content.Context
 import com.idb.idbonepos.model.PrintSettings
-import com.idb.idbonepos.model.PrinterProfileType
-import com.idb.idbonepos.printing.UrlPrintService.isEthernet
 import java.io.ByteArrayInputStream
 import java.net.URL
 
@@ -31,9 +29,9 @@ fun printGraphicTestPageFromUrl(
         //val chunks = listOf(initCommands) + rasterChunks//todo -> disable cut paper
         val chunks = listOf(initCommands) + rasterChunks + listOf(cutterCommands)
 
-        if (isEthernet(PrinterProfileType.ORDER.name,address)){
+        if (name == "Ethernet Printer") {
             EthernetPrinter().print(address, chunks)
-        }else{
+        } else {
             BluetoothPrinter().print(address, chunks)
         }
         true

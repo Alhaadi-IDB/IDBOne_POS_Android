@@ -1,5 +1,6 @@
 package com.idb.idbonepos
 
+import android.app.ComponentCaller
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -21,15 +22,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Set status bar color to match toolbar gradient (primary color from theme)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary)
+        // Enable edge-to-edge display (required for API 36)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         
-        // Enable edge-to-edge display
-        WindowCompat.setDecorFitsSystemWindows(window, true)
+        // Set status bar color to transparent for edge-to-edge
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
         
-        // Make status bar content dark (since gradient background is dark purple)
+        // Make status bar content light (white icons) since toolbar has dark gradient background
         val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController?.isAppearanceLightStatusBars = true
+        windowInsetsController?.isAppearanceLightStatusBars = false
         
         handleDeepLink(intent)
         setContent {
@@ -39,8 +40,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
+    override fun onNewIntent(intent: Intent, caller: ComponentCaller) {
+        super.onNewIntent(intent, caller)
         handleDeepLink(intent)
     }
 

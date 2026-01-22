@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">#9D7DF7</color>
+    <color name="colorPrimary">#6C18A4</color>
+    <color name="colorPrimaryDark">#4A0E6E</color>
+    <color name="error_red">#F44336</color>
+    <color name="gradient_dark">#4A0E6E</color>
+    <color name="gradient_end">#A857CC</color>
+    <color name="gradient_light">#F5EEFC</color>
+    <color name="gradient_mid">#8B3DB8</color>
+    <color name="gradient_start">#6C18A4</color>
+    <color name="purple_soft">#E8D4F2</color>
+    <color name="purple_ultra_light">#FBF9FD</color>
+    <color name="success_green">#4CAF50</color>
+    <color name="warning_orange">#FF9800</color>
+    <style name="Theme.PrintBridge" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:windowTranslucentStatus">false</item>
+    </style>
+</resources>
