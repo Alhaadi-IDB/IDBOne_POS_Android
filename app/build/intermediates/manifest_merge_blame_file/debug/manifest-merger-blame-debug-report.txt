@@ -1,31 +1,31 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 3    package="com.idb.idbonepos"
-4    android:versionCode="1"
-5    android:versionName="1.0" >
+4    android:versionCode="2"
+5    android:versionName="1.0.0" >
 6
 7    <uses-sdk
 8        android:minSdkVersion="24"
 9        android:targetSdkVersion="34" />
 10
 11    <uses-permission android:name="android.permission.INTERNET" />
-11-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:3:5-67
-11-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:3:22-64
+11-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:3:5-67
+11-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:3:22-64
 12    <uses-permission
-12-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:4:5-95
+12-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:4:5-95
 13        android:name="android.permission.BLUETOOTH"
-13-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:4:22-65
+13-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:4:22-65
 14        android:maxSdkVersion="30" />
-14-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:4:66-92
+14-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:4:66-92
 15    <uses-permission
-15-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:5:5-101
+15-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:5:5-101
 16        android:name="android.permission.BLUETOOTH_ADMIN"
-16-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:5:22-71
+16-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:5:22-71
 17        android:maxSdkVersion="30" />
-17-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:5:72-98
+17-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:5:72-98
 18    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-18-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:6:5-76
-18-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:6:22-73
+18-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:6:5-76
+18-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:6:22-73
 19
 20    <permission
 20-->[androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
@@ -39,66 +39,66 @@
 24-->[androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
 25
 26    <application
-26-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:8:5-37:19
+26-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:8:5-37:19
 27        android:allowBackup="true"
-27-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:9:9-35
+27-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:9:9-35
 28        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 28-->[androidx.core:core:1.12.0] /Users/alhaadiidb/.gradle/caches/transforms-3/d1e4a685b1001794fbcfe4ee9c157a7e/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
 29        android:debuggable="true"
 30        android:extractNativeLibs="false"
 31        android:icon="@mipmap/ic_launcher"
-31-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:13:9-43
+31-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:13:9-43
 32        android:label="IDB POS"
-32-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:10:9-32
+32-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:10:9-32
 33        android:roundIcon="@mipmap/ic_launcher_round"
-33-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:14:9-54
+33-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:14:9-54
 34        android:supportsRtl="true"
-34-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:11:9-35
+34-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:11:9-35
 35        android:testOnly="true"
 36        android:theme="@style/Theme.PrintBridge"
-36-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:15:9-49
+36-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:15:9-49
 37        android:usesCleartextTraffic="true" >
-37-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:12:9-44
+37-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:12:9-44
 38        <activity
-38-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:17:9-36:20
+38-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:17:9-36:20
 39            android:name="com.idb.idbonepos.MainActivity"
-39-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:18:13-41
+39-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:18:13-41
 40            android:exported="true"
-40-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:19:13-36
+40-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:19:13-36
 41            android:launchMode="singleTop" >
-41-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:20:13-43
+41-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:20:13-43
 42            <intent-filter>
-42-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:22:13-25:29
+42-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:22:13-25:29
 43                <action android:name="android.intent.action.MAIN" />
-43-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:23:17-69
-43-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:23:25-66
+43-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:23:17-69
+43-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:23:25-66
 44
 45                <category android:name="android.intent.category.LAUNCHER" />
-45-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:24:17-77
-45-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:24:27-74
+45-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:24:17-77
+45-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:24:27-74
 46            </intent-filter>
 47            <intent-filter android:autoVerify="true" >
-47-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:27:13-35:29
-47-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:27:28-53
+47-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:27:13-35:29
+47-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:27:28-53
 48                <action android:name="android.intent.action.VIEW" />
-48-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:28:17-69
-48-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:28:25-66
+48-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:28:17-69
+48-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:28:25-66
 49
 50                <category android:name="android.intent.category.DEFAULT" />
-50-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:29:17-76
-50-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:29:27-73
+50-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:29:17-76
+50-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:29:27-73
 51                <category android:name="android.intent.category.BROWSABLE" />
-51-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:30:17-78
-51-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:30:27-75
+51-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:30:17-78
+51-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:30:27-75
 52
 53                <data
-53-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:31:17-34:52
+53-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:31:17-34:52
 54                    android:host="com.idb.idbonepos"
-54-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:33:21-53
+54-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:33:21-53
 55                    android:pathPrefix="/orders"
-55-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:34:21-49
+55-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:34:21-49
 56                    android:scheme="https" />
-56-->/Users/alhaadiidb/Downloads/deeplink_bak/app/src/main/AndroidManifest.xml:32:21-43
+56-->/Users/alhaadiidb/Downloads/idbone_pos/app/src/main/AndroidManifest.xml:32:21-43
 57            </intent-filter>
 58        </activity>
 59        <activity

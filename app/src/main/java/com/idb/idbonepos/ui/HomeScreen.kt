@@ -121,7 +121,7 @@ fun HomeScreen(
     AppScaffold(
         topBar = {
             ModernToolbar(
-                title = "${appVersion}",
+                title = "Home",
                 actions = {
                     IconButton(
                         onClick = { optionsExpanded = true },

@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "deeplink"
+rootProject.name = "idbonepos"
 include(":app")

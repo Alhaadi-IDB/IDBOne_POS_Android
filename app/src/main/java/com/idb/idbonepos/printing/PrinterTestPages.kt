@@ -2,6 +2,8 @@ package com.idb.idbonepos.printing
 
 import android.content.Context
 import com.idb.idbonepos.model.PrintSettings
+import com.idb.idbonepos.model.PrinterProfileType
+import com.idb.idbonepos.printing.UrlPrintService.isEthernet
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -24,7 +26,8 @@ fun printGraphicTestPage(context: Context, settings: PrintSettings, name: String
     val cutterCommands = EscPosCommands.parseHexString(settings.cutterCommands)
     val rasterChunks = EscPosRasterizer.bitmapToRasterChunks(bitmap)
     val chunks = listOf(initCommands) + rasterChunks + listOf(cutterCommands)
-    if (name == "Ethernet Printer") {
+
+    if (isEthernet(PrinterProfileType.ORDER.name, address)) {
         EthernetPrinter().print(address, chunks)
     } else {
         BluetoothPrinter().print(address, chunks)

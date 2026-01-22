@@ -24,8 +24,8 @@ object UrlPrintService {
         val rasterChunks = EscPosRasterizer.bitmapToRasterChunks(bitmap)
         val initCommands = EscPosCommands.parseHexString(effectiveSettings.initialCommands)
         val cutterCommands = EscPosCommands.parseHexString(settings.cutterCommands)
-//        val chunks = listOf(initCommands) + rasterChunks + listOf(cutterCommands)//TODO -> enable cut paper
-        val chunks = listOf(initCommands) + rasterChunks
+        //val chunks = listOf(initCommands) + rasterChunks//todo -> disable cut paper
+        val chunks = listOf(initCommands) + rasterChunks + listOf(cutterCommands)
 
         if (isEthernet(type, address)) {
             EthernetPrinter().print(address, chunks)
@@ -47,7 +47,7 @@ object UrlPrintService {
     fun isEthernet(type: String, address: String): Boolean {
         val normalized = type.trim().lowercase()
         return when {
-            normalized == "ethernet" || normalized == "network" || normalized == "ip" -> true
+            normalized == "ethernet" || normalized == "network" || normalized == "ip" || normalized == "ethernet printer"-> true
             normalized == "bluetooth" || normalized == "bt" -> false
             normalized.isBlank() -> !address.contains(":")
             else -> !address.contains(":")

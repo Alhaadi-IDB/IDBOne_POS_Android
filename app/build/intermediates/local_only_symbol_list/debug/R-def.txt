@@ -13,6 +13,8 @@ color purple_soft
 color purple_ultra_light
 color success_green
 color warning_orange
+drawable collapse
+drawable expand
 drawable idb_robot
 drawable loading_robot
 mipmap ic_launcher
